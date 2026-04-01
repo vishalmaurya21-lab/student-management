@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
-use App\Models\Course; 
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 
@@ -27,16 +27,16 @@ class StudentController extends Controller
             'email'         => 'required|email',
             'phone'         => 'required',
             'city'          => 'required',
-            'inrollment_no' => 'required',
+            'enrollment_no' => 'required|unique:students',
             'course'        => 'required',
-        ]); 
+        ]);
 
         $student = Student::create([
             'name'          => $request->name,
             'email'         => $request->email,
             'phone'         => $request->phone,
             'city'          => $request->city,
-            'inrollment_no' => $request->inrollment_no,
+            'enrollment_no' => $request->enrollment_no,
         ]);
 
         Course::create([
@@ -54,7 +54,7 @@ class StudentController extends Controller
         $students = Student::when($search, function ($query, $search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         })->paginate(5);
 
@@ -72,7 +72,7 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
         return view('student.edit', compact('student'));
     }
-    
+
     public function update(Request $request, $id)
     {
         // Fixed: validate first, then update only known fields (was $request->all() with no validation)
@@ -81,7 +81,7 @@ class StudentController extends Controller
             'email'         => 'required|email',
             'phone'         => 'required',
             'city'          => 'required',
-            'inrollment_no' => 'required',
+            'enrollment_no' => 'required|unique:students,enrollment_no,' . $id,
             'course'        => 'required',
         ]);
 
@@ -91,7 +91,7 @@ class StudentController extends Controller
             'email'         => $validated['email'],
             'phone'         => $validated['phone'],
             'city'          => $validated['city'],
-            'inrollment_no' => $validated['inrollment_no'],
+            'enrollment_no' => $validated['enrollment_no'],
         ]);
 
         // Update or create the related course record
@@ -101,7 +101,7 @@ class StudentController extends Controller
         );
 
         return redirect()->route('student.show')->with('success', 'Student updated successfully');
-    } 
+    }
 
     public function destroy($id)
     {
