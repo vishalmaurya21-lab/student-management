@@ -10,7 +10,7 @@
     <h2>Welcome in demo Page</h2>
     <input type="text" name="name" id="name" placeholder="enter your name..."><br><br>
     <button class="press" type="button">Press ME</button>
-    <div id="hime-me">
+    <div id="hide-me">
         <h2>jadu dekhoge press buttton</h2>
     </div>
     <div id="nahi-dikha">
