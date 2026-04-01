@@ -46,3 +46,5 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/welcome', function () {
     return view('welcome');
 });
+
+Route::view('demo');
